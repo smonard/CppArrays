@@ -1,4 +1,5 @@
 override COMPILER_OPTIONS := -lstdc++ -std=c++2a -fconcepts
+override VALGRIND_OPTIONS := --tool=memcheck --leak-check=yes
 
 clear:
 	rm -rf build/*
@@ -14,3 +15,9 @@ run_tests: build_tests
 
 run: build
 	build/enhanced_list_example
+
+check: build
+	valgrind $(VALGRIND_OPTIONS) build/enhanced_list_example
+
+check_tests: build_tests
+	valgrind $(VALGRIND_OPTIONS) build/tests_runner
