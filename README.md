@@ -5,7 +5,7 @@ C++ enhanced lists. Just to support handy methods such as each or count.
 ## Usage
 
 
-### each
+### Each 
 
 ```c++
 enhanced_list<int> int_list{ 1, 2, 3, 4 };
@@ -17,7 +17,7 @@ Alternatively It could be used:
 ```c++
 int_list.each([] (const auto& number) { std::cout << number << std::endl; });
 ```
-### count
+### Count
 
 ```c++
 enhanced_list<int> int_list{ 1, 2, 3, 4 };
@@ -29,3 +29,24 @@ Alternatively It could be used:
 ```c++
 unsigned long int even_count = int_list.count([] (const int& number) { return number % 2 == 0; } );
 ```
+
+## Project auto-tasks
+
+Described in `Makefile`
+
+### Run examples
+
+`make run`
+
+### Run tests
+
+`make run_tests`
+
+### Clear generated files 
+
+`make clear`
+
+### Run valgrind checks
+
+`make check` main check
+`make check_tests` tests check

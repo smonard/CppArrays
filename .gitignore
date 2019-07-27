@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+
+# exclude generated files
+build/*
+
+# # exception to the rule
+!build/.keep
