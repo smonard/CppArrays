@@ -1,9 +1,9 @@
 #ifndef TEST
 #define TEST
-#include<stdlib.h>
+#include <stdlib.h>
+#include <sstream> 
 
-
-#include<iostream>
+#include <iostream>
 
 using namespace std;
 
@@ -23,14 +23,25 @@ class tester {
         this->current_test = test_case;
     }
 
-    void assertEqual(string expected, string actual) {
-        if(expected == actual) ok_test(current_test,  (actual));
-        else fail_test(current_test,  (expected),  (actual));
+    template<typename T>
+    void assertEqual(T actual, T expected) {
+        if(expected == actual) 
+            ok_test(actual);
+        else {
+            ostringstream message;
+            message << "Expected " << actual << " to be " << expected;
+            fail_test(message.str());
+        }
     }
 
-    void assertEqual(int expected, int actual) {
-        if(expected == actual) ok_test(current_test,  std::to_string(actual));
-        else fail_test(current_test,  std::to_string(expected),  std::to_string(actual));
+    template<typename T>
+    void assertNotEqual(T* arg1, T* arg2) {
+        if(arg1 != arg2) ok_test(arg2);
+        else {
+            ostringstream message;
+            message << "Expected " << arg2 << " other than that value";
+            fail_test(message.str());
+        }
     }
 
     const int& getFailedTests(){
@@ -42,14 +53,24 @@ class tester {
 
     private:
 
-    void fail_test(string test_name, string expected, string actual) {
-        failed_tests++;
-        cout<< "\033[1;31mTest: " << test_name << " ----> Failed. " << "Expected " << actual << " to be " << expected << "\033[0m" << endl;
+    template<typename T>
+    void verify_each_element(list<T>* actual, list<T>* expected) {
+        for(auto it = (*actual).begin(), it_2 = (*expected).begin(); it != (*actual).end(); ++it) {
+            assertEqual(*it, *it_2);
+            it_2++;
+        }
     }
 
-    void ok_test(string test_name, string result) {
+    template<typename T>
+    void fail_test(T output) {
+        failed_tests++;
+        cout<< "\033[1;31mTest: " << current_test << " ----> Failed. " << output << "\033[0m" << endl;
+    }
+
+    template<typename T>
+    void ok_test(T result) {
         ok_asserts++;
-        cout<< "\033[32mTest: " << test_name << " ----> Ok. " << "Result " << result << "\033[0m" << endl;
+        cout<< "\033[32mTest: " << current_test << " ----> Ok. " << "Result " << result << "\033[0m" << endl;
     }
 };
 

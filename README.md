@@ -29,6 +29,20 @@ Alternatively It could be used:
 ```c++
 unsigned long int even_count = int_list.count([] (const int& number) { return number % 2 == 0; } );
 ```
+### Filter
+
+```c++
+enhanced_list<int> int_list{ 1, 2, 3, 4 };
+bool (*even_values_predicate)(const int&) = [] (const int& number) { return number % 2 == 0; };
+int_list.filter(even_values_predicate); // Gets the filtering performed on the same list, returns a pointer to itself
+int_list.get_new_filtered(even_values_predicate); // Gets a new list containing only the elements satisfying the predicate 
+                                                  // returns a unique pointer to the new list
+```
+Alternatively It could be used: (so variable capturing may be used)
+```c++
+int_list.filter([&] (const int& number) { return number % outer_var == 0; }); //or
+int_list.get_new_filtered([&] (const int& number) { return number % outer_var == 0; });
+```
 
 ## Project auto-tasks
 
@@ -49,4 +63,5 @@ Described in `Makefile`
 ### Run valgrind checks
 
 `make check` main check
+
 `make check_tests` tests check
