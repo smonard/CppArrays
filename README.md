@@ -17,6 +17,7 @@ Alternatively It could be used:
 ```c++
 int_list.each([] (const auto& number) { std::cout << number << std::endl; });
 ```
+
 ### Count
 
 ```c++
@@ -29,6 +30,7 @@ Alternatively It could be used:
 ```c++
 unsigned long int even_count = int_list.count([] (const int& number) { return number % 2 == 0; } );
 ```
+
 ### Filter
 
 ```c++
@@ -42,6 +44,21 @@ Alternatively It could be used: (so variable capturing may be used)
 ```c++
 int_list.filter([&] (const int& number) { return number % outer_var == 0; }); //or
 int_list.get_new_filtered([&] (const int& number) { return number % outer_var == 0; });
+```
+
+### Map
+
+```c++
+enhanced_list<int> int_list{ 1, 2, 3, 4 };
+std::string (*mapping_predicate)(const int&) = [] (const int& number) { return number % 2 == 0? "even" : "odd"; };
+int_list.map<string>(mapping_predicate); // Gets a new list with mapped elements specifying a data type
+int_list.map(mapping_predicate); // Gets a new list with mapped elements without specifying a data type 
+                            // both methods returns a unique pointer to the new list
+```
+Alternatively it could be used: (so variable capturing may be used)
+```c++
+int_list.map<string>([&] (const int& number) { return number % 2 == 0? outer_var1 : outer_var_2; }); //or
+int_list.map([&] (const int& number) { return number % 2 == 0? outer_var1 : outer_var_2; });
 ```
 
 ## Project auto-tasks

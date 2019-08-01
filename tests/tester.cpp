@@ -35,6 +35,19 @@ class tester {
     }
 
     template<typename T>
+    void assertEqualList(list<T>* actual, list<T>* expected) {
+        size_t size_1 = (*actual).size();
+        size_t size_2 = (*expected).size();
+        if(size_1 == size_2) 
+            verify_each_element(actual, expected);
+        else {
+            ostringstream message;
+            message << "Expected list size: " << size_1 << " to be " << size_2;
+            fail_test(message.str());
+        }
+    }
+
+    template<typename T>
     void assertNotEqual(T* arg1, T* arg2) {
         if(arg1 != arg2) ok_test(arg2);
         else {

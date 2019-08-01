@@ -48,5 +48,23 @@ class enhanced_list: public list<T> {
       return new_list;
     }
 
+    template<typename R, class Predicate>
+    unique_ptr<enhanced_list<R>> map(Predicate predicate) {
+      unique_ptr<enhanced_list<R>> new_list = make_unique<enhanced_list<R>>();
+      for(auto it = (*this).begin(); it != (*this).end(); ++it) {
+         (*new_list).push_back(predicate(*it));
+      }
+      return new_list;
+    }
+
+    template<class Predicate>
+    auto map(Predicate predicate) {
+      auto new_list = make_unique<enhanced_list<decltype(predicate(declval<T>()))>>();
+      for(auto it = (*this).begin(); it != (*this).end(); ++it) {
+         (*new_list).push_back(predicate(*it));
+      }
+      return new_list;
+    }
+
 };
 

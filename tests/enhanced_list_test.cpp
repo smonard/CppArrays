@@ -15,6 +15,8 @@ class enhanced_list_test : public tester {
         filter_with_lambda();
         new_filtered_with_closure();
         new_filtered_with_lambda();
+        map_with_closure();
+        map_with_lambda();
     }
 
     private:
@@ -113,4 +115,28 @@ class enhanced_list_test : public tester {
         assertEqual((*new_list).size(), (size_t)1);
     }
 
+    void map_with_closure() {
+        set_current_test("Applies mapping (code block within a variable)");
+        enhanced_list<int> list = { 1, 2 ,2 , 7 , 7};
+        enhanced_list<string> expected_ist = { "odd", "even", "even", "odd", "odd" };
+
+        string (*mapping)(const int&) = [] (const int& number) -> string { return number % 2 == 0? "even" : "odd"; };
+        unique_ptr<enhanced_list<string>> actual_list = list.map<string>(mapping);
+
+        assertEqualList(&expected_ist, actual_list.get());
+        unique_ptr<enhanced_list<string>> actual_list_2 = list.map(mapping);
+        assertEqualList(&expected_ist, actual_list_2.get());
+    }
+
+    void map_with_lambda() {
+        set_current_test("Applies mapping (code block sent directly)");
+        enhanced_list<int> list = { 1, 2 ,2 , 7 , 7};
+        enhanced_list<string> expected_ist = { "odd", "even", "even", "odd", "odd" };
+
+        unique_ptr<enhanced_list<string>> actual_list = list.map<string>([&] (const int& number) -> string { return number % 2 == 0? "even" : "odd"; });
+
+        assertEqualList(&expected_ist, actual_list.get());
+        unique_ptr<enhanced_list<string>> actual_list_2 = list.map([&] (const int& number) -> string { return number % 2 == 0? "even" : "odd"; });
+        assertEqualList(&expected_ist, actual_list_2.get());
+    }
 };
