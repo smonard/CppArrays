@@ -15,9 +15,10 @@ class enhanced_list: public list<T> {
     enhanced_list<T>(): list<T>() {}
 
     template <typename Predicate>
-    void each(Predicate function){
+    void each(Predicate predicate){
       for(auto it = (*this).begin(); it != (*this).end(); ++it) {
-         function(*it);
+        T const& element = (*it);
+        predicate(element);
       }     
     }
 
@@ -25,7 +26,8 @@ class enhanced_list: public list<T> {
     uint64_t count(Predicate predicate){
       uint64_t count = 0;
       for(auto it = (*this).begin(); it != (*this).end(); ++it) {
-         if(predicate(*it))
+        T const& element = (*it);
+        if(predicate(element))
           count++;
       }     
       return count;
@@ -41,9 +43,10 @@ class enhanced_list: public list<T> {
     unique_ptr<enhanced_list<T>> get_new_filtered(Predicate predicate) {
       unique_ptr<enhanced_list<T>> new_list = make_unique<enhanced_list<T>>();
       for(auto it = (*this).begin(); it != (*this).end(); ++it) {
-         if(predicate(*it)){
-            (*new_list).push_back(*it);
-         }
+        T const& element = (*it);
+        if(predicate(element)){
+          (*new_list).push_back(*it);
+        }
       }     
       return new_list;
     }
@@ -52,7 +55,8 @@ class enhanced_list: public list<T> {
     unique_ptr<enhanced_list<R>> map(Predicate predicate) {
       unique_ptr<enhanced_list<R>> new_list = make_unique<enhanced_list<R>>();
       for(auto it = (*this).begin(); it != (*this).end(); ++it) {
-         (*new_list).push_back(predicate(*it));
+        T const& element = (*it);
+        (*new_list).push_back(predicate(element));
       }
       return new_list;
     }
@@ -61,10 +65,9 @@ class enhanced_list: public list<T> {
     auto map(Predicate predicate) {
       auto new_list = make_unique<enhanced_list<decltype(predicate(declval<T>()))>>();
       for(auto it = (*this).begin(); it != (*this).end(); ++it) {
-         (*new_list).push_back(predicate(*it));
+        T const& element = (*it);
+        (*new_list).push_back(predicate(element));
       }
       return new_list;
     }
-
 };
-

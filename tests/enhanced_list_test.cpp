@@ -17,6 +17,7 @@ class enhanced_list_test : public tester {
         new_filtered_with_lambda();
         map_with_closure();
         map_with_lambda();
+        inmutable_elements();
     }
 
     private:
@@ -118,25 +119,41 @@ class enhanced_list_test : public tester {
     void map_with_closure() {
         set_current_test("Applies mapping (code block within a variable)");
         enhanced_list<int> list = { 1, 2 ,2 , 7 , 7};
-        enhanced_list<string> expected_ist = { "odd", "even", "even", "odd", "odd" };
+        enhanced_list<string> expected_list = { "odd", "even", "even", "odd", "odd" };
 
         string (*mapping)(const int&) = [] (const int& number) -> string { return number % 2 == 0? "even" : "odd"; };
         unique_ptr<enhanced_list<string>> actual_list = list.map<string>(mapping);
 
-        assertEqualList(&expected_ist, actual_list.get());
+        assertEqualList(&expected_list, actual_list.get());
         unique_ptr<enhanced_list<string>> actual_list_2 = list.map(mapping);
-        assertEqualList(&expected_ist, actual_list_2.get());
+        assertEqualList(&expected_list, actual_list_2.get());
     }
 
     void map_with_lambda() {
         set_current_test("Applies mapping (code block sent directly)");
         enhanced_list<int> list = { 1, 2 ,2 , 7 , 7};
-        enhanced_list<string> expected_ist = { "odd", "even", "even", "odd", "odd" };
+        enhanced_list<string> expected_list = { "odd", "even", "even", "odd", "odd" };
 
         unique_ptr<enhanced_list<string>> actual_list = list.map<string>([&] (const int& number) -> string { return number % 2 == 0? "even" : "odd"; });
 
-        assertEqualList(&expected_ist, actual_list.get());
+        assertEqualList(&expected_list, actual_list.get());
         unique_ptr<enhanced_list<string>> actual_list_2 = list.map([&] (const int& number) -> string { return number % 2 == 0? "even" : "odd"; });
-        assertEqualList(&expected_ist, actual_list_2.get());
+        assertEqualList(&expected_list, actual_list_2.get());
     }
+
+    void inmutable_elements() {
+        set_current_test("Inmutable elements in code block");
+
+        enhanced_list<int> list = { 1, 2 ,2 , 7 , 7};
+        enhanced_list<int> expected_list = { 1, 2 ,2 , 7 , 7};
+
+        auto list_2 = list.filter([] (int number) { number = 0; return true; })->get_new_filtered([] (int number) { number = 0; return true; });
+        list_2->each([] (int number) { number = 0; });
+        list_2->map([] (int number) { number = 0; return number; });
+        list_2->map<int>([] (int number) { number = 0; return number; });
+        list_2->count([] (int number) { number = 0; return true; });
+
+        assertEqualList(list_2.get(), &expected_list);
+    }
+
 };
