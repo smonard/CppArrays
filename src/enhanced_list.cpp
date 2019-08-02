@@ -51,6 +51,14 @@ class enhanced_list: public list<T> {
       return new_list;
     }
 
+    template <typename Predicate>
+    enhanced_list<T> * map(Predicate predicate){
+      for(auto it = (*this).begin(); it != (*this).end(); ++it) {
+        *it = predicate(*it);
+      }
+      return this;
+    }
+
     template<typename R, class Predicate>
     unique_ptr<enhanced_list<R>> _map(Predicate predicate) {
       unique_ptr<enhanced_list<R>> new_list = make_unique<enhanced_list<R>>();

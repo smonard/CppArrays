@@ -15,6 +15,8 @@ class enhanced_list_test : public tester {
         filter_with_lambda();
         new_filtered_with_closure();
         new_filtered_with_lambda();
+        map_with_closure();
+        map_with_lamdba();
         new_mapped_with_closure();
         new_mapped_with_lambda();
         inmutable_elements();
@@ -114,6 +116,29 @@ class enhanced_list_test : public tester {
         assertEqual(expected, actual);
         assertNotEqual(new_list.get(), &list);
         assertEqual((*new_list).size(), (size_t)1);
+    }
+
+    void map_with_closure() {
+        set_current_test("It maps elements given a predicate (code block within a variable)");
+        enhanced_list<int> list = { 1, 2 ,2 , 7 , 7};
+        enhanced_list<int> expected_list = { 10, 20, 20, 70, 70 };
+
+        int (*mapping)(const int&) = [] (const int& number) -> int { return number * 10; };
+        enhanced_list<int>* actual_list = list.map(mapping);
+
+        assertEqualList(&expected_list, actual_list);
+        assertEqual(actual_list, &list);
+    }
+
+    void map_with_lamdba() {
+        set_current_test("It maps elements given a predicate (code block sent directly)");
+        enhanced_list<int> list = { 1, 2 ,2 , 7 , 7};
+        enhanced_list<int> expected_list = { 10, 20, 20, 70, 70 };
+
+        enhanced_list<int>* actual_list = list.map([] (const int& number) -> int { return number * 10; });
+
+        assertEqualList(&expected_list, actual_list);
+        assertEqual(actual_list, &list);
     }
 
     void new_mapped_with_closure() {

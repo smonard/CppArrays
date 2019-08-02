@@ -50,6 +50,18 @@ int_list._filter([&] (const int& number) { return number % outer_var == 0; });
 
 ```c++
 enhanced_list<int> int_list{ 1, 2, 3, 4 };
+int (*transform_values_predicate)(const int&) = [] (const int& number) { return number * 2; };
+int_list.map(transform_values_predicate); // Gets the mapping performed on the same list, returns a pointer to itself
+```
+Alternatively It could be used: (so variable capturing may be used)
+```c++
+int_list.map([&] (const int& number) { return number * outer_var; });
+```
+
+Also, if a new data type needed, the _map method does exist:
+
+```c++
+enhanced_list<int> int_list{ 1, 2, 3, 4 };
 std::string (*mapping_predicate)(const int&) = [] (const int& number) { return number % 2 == 0? "even" : "odd"; };
 int_list._map<string>(mapping_predicate); // Gets a new list with mapped elements specifying a data type
 int_list._map(mapping_predicate); // Gets a new list with mapped elements without specifying a data type 
