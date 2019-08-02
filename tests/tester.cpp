@@ -1,7 +1,7 @@
 #ifndef TEST
 #define TEST
 #include <stdlib.h>
-#include <sstream> 
+#include <sstream>
 
 #include <iostream>
 
