@@ -40,7 +40,7 @@ class enhanced_list: public list<T> {
     }
 
     template <typename Predicate> 
-    unique_ptr<enhanced_list<T>> get_new_filtered(Predicate predicate) {
+    unique_ptr<enhanced_list<T>> _filter(Predicate predicate) {
       unique_ptr<enhanced_list<T>> new_list = make_unique<enhanced_list<T>>();
       for(auto it = (*this).begin(); it != (*this).end(); ++it) {
         T const& element = (*it);
@@ -52,7 +52,7 @@ class enhanced_list: public list<T> {
     }
 
     template<typename R, class Predicate>
-    unique_ptr<enhanced_list<R>> map(Predicate predicate) {
+    unique_ptr<enhanced_list<R>> _map(Predicate predicate) {
       unique_ptr<enhanced_list<R>> new_list = make_unique<enhanced_list<R>>();
       for(auto it = (*this).begin(); it != (*this).end(); ++it) {
         T const& element = (*it);
@@ -62,12 +62,12 @@ class enhanced_list: public list<T> {
     }
 
     template<class Predicate>
-    auto map(Predicate predicate) {
+    auto _map(Predicate predicate) {
       auto new_list = make_unique<enhanced_list<decltype(predicate(declval<T>()))>>();
       for(auto it = (*this).begin(); it != (*this).end(); ++it) {
         T const& element = (*it);
         (*new_list).push_back(predicate(element));
-      }
+      }     
       return new_list;
     }
 };

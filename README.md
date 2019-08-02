@@ -37,13 +37,13 @@ unsigned long int even_count = int_list.count([] (const int& number) { return nu
 enhanced_list<int> int_list{ 1, 2, 3, 4 };
 bool (*even_values_predicate)(const int&) = [] (const int& number) { return number % 2 == 0; };
 int_list.filter(even_values_predicate); // Gets the filtering performed on the same list, returns a pointer to itself
-int_list.get_new_filtered(even_values_predicate); // Gets a new list containing only the elements satisfying the predicate 
+int_list._filter(even_values_predicate); // Gets a new list containing only the elements satisfying the predicate 
                                                   // returns a unique pointer to the new list
 ```
 Alternatively It could be used: (so variable capturing may be used)
 ```c++
 int_list.filter([&] (const int& number) { return number % outer_var == 0; }); //or
-int_list.get_new_filtered([&] (const int& number) { return number % outer_var == 0; });
+int_list._filter([&] (const int& number) { return number % outer_var == 0; });
 ```
 
 ### Map
@@ -51,14 +51,14 @@ int_list.get_new_filtered([&] (const int& number) { return number % outer_var ==
 ```c++
 enhanced_list<int> int_list{ 1, 2, 3, 4 };
 std::string (*mapping_predicate)(const int&) = [] (const int& number) { return number % 2 == 0? "even" : "odd"; };
-int_list.map<string>(mapping_predicate); // Gets a new list with mapped elements specifying a data type
-int_list.map(mapping_predicate); // Gets a new list with mapped elements without specifying a data type 
+int_list._map<string>(mapping_predicate); // Gets a new list with mapped elements specifying a data type
+int_list._map(mapping_predicate); // Gets a new list with mapped elements without specifying a data type 
                             // both methods returns a unique pointer to the new list
 ```
 Alternatively it could be used: (so variable capturing may be used)
 ```c++
-int_list.map<string>([&] (const int& number) { return number % 2 == 0? outer_var1 : outer_var_2; }); //or
-int_list.map([&] (const int& number) { return number % 2 == 0? outer_var1 : outer_var_2; });
+int_list._map<string>([&] (const int& number) { return number % 2 == 0? outer_var1 : outer_var_2; }); //or
+int_list._map([&] (const int& number) { return number % 2 == 0? outer_var1 : outer_var_2; });
 ```
 
 ## Project auto-tasks

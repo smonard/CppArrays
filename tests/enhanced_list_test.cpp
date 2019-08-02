@@ -15,8 +15,8 @@ class enhanced_list_test : public tester {
         filter_with_lambda();
         new_filtered_with_closure();
         new_filtered_with_lambda();
-        map_with_closure();
-        map_with_lambda();
+        new_mapped_with_closure();
+        new_mapped_with_lambda();
         inmutable_elements();
     }
 
@@ -95,7 +95,7 @@ class enhanced_list_test : public tester {
         int expected = 2;
 
         bool (*var)(const int&) = [] (const int& number) -> bool { return number != 4; };
-        auto new_list = list.get_new_filtered(var);
+        auto new_list = list._filter(var);
         int actual = (*new_list).front();
 
         assertEqual(expected, actual);
@@ -108,7 +108,7 @@ class enhanced_list_test : public tester {
         enhanced_list<int> list = { 4,4,4,2,4};
         int expected = 2;
 
-        auto new_list = list.get_new_filtered([&] (const int& number) -> bool { return number != 4; });
+        auto new_list = list._filter([&] (const int& number) -> bool { return number != 4; });
         int actual = (*new_list).front();
 
         assertEqual(expected, actual);
@@ -116,28 +116,28 @@ class enhanced_list_test : public tester {
         assertEqual((*new_list).size(), (size_t)1);
     }
 
-    void map_with_closure() {
-        set_current_test("Applies mapping (code block within a variable)");
+    void new_mapped_with_closure() {
+        set_current_test("Returns a new list applying the mapping (code block within a variable)");
         enhanced_list<int> list = { 1, 2 ,2 , 7 , 7};
         enhanced_list<string> expected_list = { "odd", "even", "even", "odd", "odd" };
 
         string (*mapping)(const int&) = [] (const int& number) -> string { return number % 2 == 0? "even" : "odd"; };
-        unique_ptr<enhanced_list<string>> actual_list = list.map<string>(mapping);
+        unique_ptr<enhanced_list<string>> actual_list = list._map<string>(mapping);
 
         assertEqualList(&expected_list, actual_list.get());
-        unique_ptr<enhanced_list<string>> actual_list_2 = list.map(mapping);
+        unique_ptr<enhanced_list<string>> actual_list_2 = list._map(mapping);
         assertEqualList(&expected_list, actual_list_2.get());
     }
 
-    void map_with_lambda() {
-        set_current_test("Applies mapping (code block sent directly)");
+    void new_mapped_with_lambda() {
+        set_current_test("Returns a new list applying the mapping (code block sent directly)");
         enhanced_list<int> list = { 1, 2 ,2 , 7 , 7};
         enhanced_list<string> expected_list = { "odd", "even", "even", "odd", "odd" };
 
-        unique_ptr<enhanced_list<string>> actual_list = list.map<string>([&] (const int& number) -> string { return number % 2 == 0? "even" : "odd"; });
+        unique_ptr<enhanced_list<string>> actual_list = list._map<string>([&] (const int& number) -> string { return number % 2 == 0? "even" : "odd"; });
 
         assertEqualList(&expected_list, actual_list.get());
-        unique_ptr<enhanced_list<string>> actual_list_2 = list.map([&] (const int& number) -> string { return number % 2 == 0? "even" : "odd"; });
+        unique_ptr<enhanced_list<string>> actual_list_2 = list._map([&] (const int& number) -> string { return number % 2 == 0? "even" : "odd"; });
         assertEqualList(&expected_list, actual_list_2.get());
     }
 
@@ -147,10 +147,10 @@ class enhanced_list_test : public tester {
         enhanced_list<int> list = { 1, 2 ,2 , 7 , 7};
         enhanced_list<int> expected_list = { 1, 2 ,2 , 7 , 7};
 
-        auto list_2 = list.filter([] (int number) { number = 0; return true; })->get_new_filtered([] (int number) { number = 0; return true; });
+        auto list_2 = list.filter([] (int number) { number = 0; return true; })->_filter([] (int number) { number = 0; return true; });
         list_2->each([] (int number) { number = 0; });
-        list_2->map([] (int number) { number = 0; return number; });
-        list_2->map<int>([] (int number) { number = 0; return number; });
+        list_2->_map([] (int number) { number = 0; return number; });
+        list_2->_map<int>([] (int number) { number = 0; return number; });
         list_2->count([] (int number) { number = 0; return true; });
 
         assertEqualList(list_2.get(), &expected_list);

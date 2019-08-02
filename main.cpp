@@ -24,8 +24,8 @@ int main() {
   cout << endl << "Even values of original list: " << int_list.count([] (const int& number) { return number % 2 == 0; } ) << endl;
   
   auto mapped_list = int_list
-          .get_new_filtered(is_prime)
-          ->map([&] (const int& number) {  
+          ._filter(is_prime)
+          ->_map([&] (const int& number) {  
             ostringstream element;
             element << "result for " << number << " = " << to_string(factorial(number));
             return element.str();
