@@ -73,6 +73,13 @@ int_list._map<string>([&] (const int& number) { return number % 2 == 0? outer_va
 int_list._map([&] (const int& number) { return number % 2 == 0? outer_var1 : outer_var_2; });
 ```
 
+####Note
+
+Due to unique_ptr, it is possible to chain operations `list->_filter(...)->_map(...)` (without worrying about
+freeing themiddle pointer), but with too many calls it may end up as a seg fault, because the unique_ptr will
+deallocate the list pointer after it is out of scope, in chained calls it could happen in the middle of
+the invocations.
+
 ## Project auto-tasks
 
 Described in `Makefile`

@@ -30,10 +30,16 @@ int main() {
             element << "result for " << number << " = " << to_string(factorial(number));
             return element.str();
           });
+          
+  auto mapped_list_2 = (*mapped_list).map([] (const string& message) {  
+            ostringstream element;
+            element << "The " << message;
+            return element.str();
+          });
 
   cout << "Contents of the new list: " << endl;
   void (*print_values)(const string&) = [] (const string& result) { cout << result << endl; };
-  (*mapped_list).each(print_values);
+  (*mapped_list_2).each(print_values);
   
   return 0;
 }
