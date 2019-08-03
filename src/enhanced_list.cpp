@@ -78,4 +78,8 @@ class enhanced_list: public list<T> {
       }     
       return new_list;
     }
+
+    T const& operator[](const int& index) const {
+        return *next((*this).begin(), index);
+    }
 };

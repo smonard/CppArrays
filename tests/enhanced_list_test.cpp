@@ -20,6 +20,7 @@ class enhanced_list_test : public tester {
         new_mapped_with_closure();
         new_mapped_with_lambda();
         inmutable_elements();
+        access_element_by_index();
     }
 
     private:
@@ -181,4 +182,13 @@ class enhanced_list_test : public tester {
         assertEqualList(list_2.get(), &expected_list);
     }
 
+    void access_element_by_index() {
+        set_current_test("Access element by index");
+        enhanced_list<string> list = { "1", "2", "3", "4" };
+        string expected_item = "3";
+
+        const string& actual_item = list[2];
+
+        assertEqual(actual_item, expected_item); 
+    }
 };
