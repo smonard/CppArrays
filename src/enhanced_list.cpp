@@ -7,12 +7,26 @@ using namespace std;
 
 template <typename T>
 class enhanced_list: public list<T> {
-  typedef  std::allocator<T> Allocator;
+  typedef std::allocator<T> Allocator;
+  typedef std::size_t size_type;
 
   public:
 
-    enhanced_list<T>( std::initializer_list<T> init, const Allocator& alloc = Allocator()): list<T>( init, alloc) {}
     enhanced_list<T>(): list<T>() {}
+    explicit enhanced_list<T>( const Allocator& alloc ): list<T>(alloc) {}
+    // until C++11
+    // explicit enhanced_list<T>( size_type count, const T& value = T(), const Allocator& alloc = Allocator()): list<T>( count, value, alloc ) {}
+    enhanced_list<T>( size_type count, const T& value, const Allocator& alloc = Allocator()): list<T>( count, value, alloc ) {}
+    // until C++14
+    // explicit enhanced_list<T>( size_type count ): list<T>( count ) {}
+    explicit enhanced_list<T>( size_type count, const Allocator& alloc = Allocator() ): list<T>(count, alloc) {}
+    template< class InputIt >
+    enhanced_list<T>( InputIt first, InputIt last, const Allocator& alloc = Allocator() ): list<T>(first, last, alloc) {}
+    enhanced_list<T>( const list<T>& other ): list<T>(other) {}
+    enhanced_list<T>( const list<T>& other, const Allocator& alloc ): list<T>(other, alloc) {}
+    enhanced_list<T>( list<T>&& other ): list<T>(other) {}
+    enhanced_list<T>( list<T>&& other, const Allocator& alloc ): list<T>(other, alloc) {} 
+    enhanced_list<T>( std::initializer_list<T> init, const Allocator& alloc = Allocator()): list<T>( init, alloc ) {}
 
     template <typename Predicate>
     void each(Predicate predicate){

@@ -2,6 +2,7 @@
 #define TEST
 #include <stdlib.h>
 #include <sstream>
+#include <list>
 
 #include <iostream>
 

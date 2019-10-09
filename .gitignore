@@ -31,8 +31,11 @@
 *.out
 *.app
 
-# exclude generated files
+# Editors' files
+.buildconfig
+
+# Exclude generated files
 build/*
 
-# # exception to the rule
+# Exception to the rule
 !build/.keep

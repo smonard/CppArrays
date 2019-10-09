@@ -21,17 +21,18 @@ bool is_prime(const int& number) {
 
 int main() {
   enhanced_list<int> int_list{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-  cout << endl << "Even values of original list: " << int_list.count([] (const int& number) { return number % 2 == 0; } ) << endl;
+  cout << endl << "Even values from original list: " << int_list.count([] (const int& number) { return number % 2 == 0; } ) << endl;
   
   auto mapped_list = int_list
           ._filter(is_prime)
-          ->_map([&] (const int& number) {  
+          ->_map([] (const int& number) {  
             ostringstream element;
             element << "result for " << number << " = " << to_string(factorial(number));
             return element.str();
           });
           
-  auto mapped_list_2 = (*mapped_list).map([] (const string& message) {  
+  auto mapped_list_2 = (*mapped_list)
+          .map([] (const string& message) {  
             ostringstream element;
             element << "The " << message;
             return element.str();

@@ -21,6 +21,7 @@ class enhanced_list_test : public tester {
         new_mapped_with_lambda();
         inmutable_elements();
         access_element_by_index();
+        implements_base_constructors();
     }
 
     private:
@@ -133,7 +134,7 @@ class enhanced_list_test : public tester {
 
     void map_with_lamdba() {
         set_current_test("It maps elements given a predicate (code block sent directly)");
-        enhanced_list<int> list = { 1, 2 ,2 , 7 , 7};
+        enhanced_list<int> list = { 1, 2 ,2 , 7 , 7 };
         enhanced_list<int> expected_list = { 10, 20, 20, 70, 70 };
 
         enhanced_list<int>* actual_list = list.map([] (const int& number) -> int { return number * 10; });
@@ -190,5 +191,73 @@ class enhanced_list_test : public tester {
         const string& actual_item = list[2];
 
         assertEqual(actual_item, expected_item); 
+    }
+
+    void implements_base_constructors() {
+        set_current_test("Implements base costructors");
+
+        empty_constr();
+        count_constr();
+        repetition_value_constr();
+        iterators_constr();
+        literal_constr();
+        copy_constr();
+        move_constr();
+    }
+
+    //enhanced_list<T>()
+    void empty_constr() {
+        enhanced_list<string> enhanced_list;
+        list<string> list;
+
+        assertEqualList(&enhanced_list, &list);
+    }
+
+    //explicit enhanced_list<T>( size_type count, const Allocator& alloc = Allocator() )
+    void count_constr() {
+        enhanced_list<string> enhanced_list(1);
+        list<string> list(1);
+
+        assertEqualList(&enhanced_list, &list);
+    }
+
+    //enhanced_list<T>( size_type count, const T& value, const Allocator& alloc = Allocator())
+    void repetition_value_constr(){
+        enhanced_list<string> enhanced_list(2, "word");
+        list<string> list(2, "word");
+
+        assertEqualList(&enhanced_list, &list);
+    }
+
+    //enhanced_list<T>( InputIt first, InputIt last, const Allocator& alloc = Allocator() )
+    void iterators_constr(){
+        list<string> words = {"the", "list"};
+        enhanced_list<string> enhanced_list(words.begin(), words.end());
+        list<string> list(words.begin(), words.end());
+
+        assertEqualList(&enhanced_list, &list);
+    }
+
+    //enhanced_list<T>( std::initializer_list<T> init, const Allocator& alloc = Allocator())
+    void literal_constr(){
+        enhanced_list<string> enhanced_list = { "1", "2" };
+        list<string> list = { "1", "2" };
+
+        assertEqualList(&enhanced_list, &list);
+    }
+
+    void copy_constr(){
+        list<string> list = { "copy" };
+        enhanced_list<string> enhanced_list = { list };
+
+        assertEqualList(&enhanced_list, &list);
+    }
+
+    void move_constr(){
+        list<string> list = { "move" };
+        enhanced_list<string> expected_list = { "move" };
+        enhanced_list<string> enhanced_list = std::move(list);
+
+        assertEqualList(&enhanced_list, &list);
     }
 };
