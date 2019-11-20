@@ -25,7 +25,7 @@ class tester {
     }
 
     template<typename T>
-    void assertEqual(T actual, T expected) {
+    void assert_equal(T actual, T expected) {
         if(expected == actual) 
             ok_test(actual);
         else {
@@ -36,7 +36,7 @@ class tester {
     }
 
     template<typename T>
-    void assertEqualList(list<T>* actual, list<T>* expected) {
+    void assert_equal_list(list<T>* actual, list<T>* expected) {
         size_t size_1 = (*actual).size();
         size_t size_2 = (*expected).size();
         if(size_1 == size_2) 
@@ -49,19 +49,19 @@ class tester {
     }
 
     template<typename T>
-    void assertNotEqual(T* arg1, T* arg2) {
+    void assert_not_equal(T* arg1, T* arg2) {
         if(arg1 != arg2) ok_test(arg2);
         else {
             ostringstream message;
-            message << "Expected " << arg2 << " other than that value";
+            message << "Expected " << arg2 << " other than this value";
             fail_test(message.str());
         }
     }
 
-    const int& getFailedTests(){
+    const int& get_failed_tests(){
         return failed_tests;
     }
-    const int& getOks(){
+    const int& get_oks(){
         return ok_asserts;
     }
 
@@ -70,15 +70,15 @@ class tester {
     template<typename T>
     void verify_each_element(list<T>* actual, list<T>* expected) {
         for(auto it = (*actual).begin(), it_2 = (*expected).begin(); it != (*actual).end(); ++it) {
-            assertEqual(*it, *it_2);
+            assert_equal(*it, *it_2);
             it_2++;
         }
     }
 
     template<typename T>
-    void fail_test(T output) {
+    void fail_test(T message) {
         failed_tests++;
-        cout<< "\033[1;31mTest: " << current_test << " ----> Failed. " << output << "\033[0m" << endl;
+        cout<< "\033[1;31mTest: " << current_test << " ----> Failed. " << message << "\033[0m" << endl;
     }
 
     template<typename T>

@@ -34,7 +34,7 @@ class enhanced_list_test : public tester {
         bool (*predicate)(const int&) = [] (const int& number) -> bool { return number > 50; };
         uint64_t actual = list.count(predicate);
 
-        assertEqual(expected, actual);
+        assert_equal(expected, actual);
     }
 
     void count_with_lambda() {
@@ -44,7 +44,7 @@ class enhanced_list_test : public tester {
         
         uint64_t actual = list.count([&] (const int& number) -> bool { return number > 55; });
 
-        assertEqual(expected, actual);
+        assert_equal(expected, actual);
     }
 
     void each_with_closure() {
@@ -56,7 +56,7 @@ class enhanced_list_test : public tester {
         auto var = [&] (const int& number) { actual.append(to_string(number)); };
         list.each(var);
 
-        assertEqual(expected, actual);
+        assert_equal(expected, actual);
     }
 
     void each_with_lambda() {
@@ -67,7 +67,7 @@ class enhanced_list_test : public tester {
 
         list.each([&] (const int& number) { actual.append(to_string(number)); });
 
-        assertEqual(expected, actual);
+        assert_equal(expected, actual);
     }
     
     void filter_with_closure() {
@@ -78,8 +78,8 @@ class enhanced_list_test : public tester {
         bool (*var)(const int&) = [] (const int& number) -> bool { return number != 4; };
         int actual = (*list.filter(var)).front();
 
-        assertEqual(expected, actual);
-        assertEqual(list.size(), (size_t)1);
+        assert_equal(expected, actual);
+        assert_equal(list.size(), (size_t)1);
     }
 
     void filter_with_lambda() {
@@ -89,8 +89,8 @@ class enhanced_list_test : public tester {
 
         int actual = (*list.filter([&] (const int& number) { return number != 4; })).front();
 
-        assertEqual(expected, actual);
-        assertEqual(list.size(), (size_t)1);
+        assert_equal(expected, actual);
+        assert_equal(list.size(), (size_t)1);
     }
 
     void new_filtered_with_closure() {
@@ -102,9 +102,9 @@ class enhanced_list_test : public tester {
         auto new_list = list._filter(var);
         int actual = (*new_list).front();
 
-        assertEqual(expected, actual);
-        assertNotEqual(new_list.get(), &list);
-        assertEqual((*new_list).size(), (size_t)1);
+        assert_equal(expected, actual);
+        assert_not_equal(new_list.get(), &list);
+        assert_equal((*new_list).size(), (size_t)1);
     }
 
     void new_filtered_with_lambda() {
@@ -115,9 +115,9 @@ class enhanced_list_test : public tester {
         auto new_list = list._filter([&] (const int& number) -> bool { return number != 4; });
         int actual = (*new_list).front();
 
-        assertEqual(expected, actual);
-        assertNotEqual(new_list.get(), &list);
-        assertEqual((*new_list).size(), (size_t)1);
+        assert_equal(expected, actual);
+        assert_not_equal(new_list.get(), &list);
+        assert_equal((*new_list).size(), (size_t)1);
     }
 
     void map_with_closure() {
@@ -128,8 +128,8 @@ class enhanced_list_test : public tester {
         int (*mapping)(const int&) = [] (const int& number) -> int { return number * 10; };
         enhanced_list<int>* actual_list = list.map(mapping);
 
-        assertEqualList(&expected_list, actual_list);
-        assertEqual(actual_list, &list);
+        assert_equal_list(&expected_list, actual_list);
+        assert_equal(actual_list, &list);
     }
 
     void map_with_lamdba() {
@@ -139,8 +139,8 @@ class enhanced_list_test : public tester {
 
         enhanced_list<int>* actual_list = list.map([] (const int& number) -> int { return number * 10; });
 
-        assertEqualList(&expected_list, actual_list);
-        assertEqual(actual_list, &list);
+        assert_equal_list(&expected_list, actual_list);
+        assert_equal(actual_list, &list);
     }
 
     void new_mapped_with_closure() {
@@ -151,9 +151,9 @@ class enhanced_list_test : public tester {
         string (*mapping)(const int&) = [] (const int& number) -> string { return number % 2 == 0? "even" : "odd"; };
         unique_ptr<enhanced_list<string>> actual_list = list._map<string>(mapping);
 
-        assertEqualList(&expected_list, actual_list.get());
+        assert_equal_list(&expected_list, actual_list.get());
         unique_ptr<enhanced_list<string>> actual_list_2 = list._map(mapping);
-        assertEqualList(&expected_list, actual_list_2.get());
+        assert_equal_list(&expected_list, actual_list_2.get());
     }
 
     void new_mapped_with_lambda() {
@@ -163,9 +163,9 @@ class enhanced_list_test : public tester {
 
         unique_ptr<enhanced_list<string>> actual_list = list._map<string>([&] (const int& number) -> string { return number % 2 == 0? "even" : "odd"; });
 
-        assertEqualList(&expected_list, actual_list.get());
+        assert_equal_list(&expected_list, actual_list.get());
         unique_ptr<enhanced_list<string>> actual_list_2 = list._map([&] (const int& number) -> string { return number % 2 == 0? "even" : "odd"; });
-        assertEqualList(&expected_list, actual_list_2.get());
+        assert_equal_list(&expected_list, actual_list_2.get());
     }
 
     void inmutable_elements() {
@@ -180,7 +180,7 @@ class enhanced_list_test : public tester {
         list_2->_map<int>([] (int number) { number = 0; return number; });
         list_2->count([] (int number) { number = 0; return true; });
 
-        assertEqualList(list_2.get(), &expected_list);
+        assert_equal_list(list_2.get(), &expected_list);
     }
 
     void access_element_by_index() {
@@ -190,7 +190,7 @@ class enhanced_list_test : public tester {
 
         const string& actual_item = list[2];
 
-        assertEqual(actual_item, expected_item); 
+        assert_equal(actual_item, expected_item); 
     }
 
     void implements_base_constructors() {
@@ -210,7 +210,7 @@ class enhanced_list_test : public tester {
         enhanced_list<string> enhanced_list;
         list<string> list;
 
-        assertEqualList(&enhanced_list, &list);
+        assert_equal_list(&enhanced_list, &list);
     }
 
     //explicit enhanced_list<T>( size_type count, const Allocator& alloc = Allocator() )
@@ -218,7 +218,7 @@ class enhanced_list_test : public tester {
         enhanced_list<string> enhanced_list(1);
         list<string> list(1);
 
-        assertEqualList(&enhanced_list, &list);
+        assert_equal_list(&enhanced_list, &list);
     }
 
     //enhanced_list<T>( size_type count, const T& value, const Allocator& alloc = Allocator())
@@ -226,7 +226,7 @@ class enhanced_list_test : public tester {
         enhanced_list<string> enhanced_list(2, "word");
         list<string> list(2, "word");
 
-        assertEqualList(&enhanced_list, &list);
+        assert_equal_list(&enhanced_list, &list);
     }
 
     //enhanced_list<T>( InputIt first, InputIt last, const Allocator& alloc = Allocator() )
@@ -235,7 +235,7 @@ class enhanced_list_test : public tester {
         enhanced_list<string> enhanced_list(words.begin(), words.end());
         list<string> list(words.begin(), words.end());
 
-        assertEqualList(&enhanced_list, &list);
+        assert_equal_list(&enhanced_list, &list);
     }
 
     //enhanced_list<T>( std::initializer_list<T> init, const Allocator& alloc = Allocator())
@@ -243,14 +243,14 @@ class enhanced_list_test : public tester {
         enhanced_list<string> enhanced_list = { "1", "2" };
         list<string> list = { "1", "2" };
 
-        assertEqualList(&enhanced_list, &list);
+        assert_equal_list(&enhanced_list, &list);
     }
 
     void copy_constr(){
         list<string> list = { "copy" };
         enhanced_list<string> enhanced_list = { list };
 
-        assertEqualList(&enhanced_list, &list);
+        assert_equal_list(&enhanced_list, &list);
     }
 
     void move_constr(){
@@ -258,6 +258,6 @@ class enhanced_list_test : public tester {
         enhanced_list<string> expected_list = { "move" };
         enhanced_list<string> enhanced_list = std::move(list);
 
-        assertEqualList(&enhanced_list, &list);
+        assert_equal_list(&enhanced_list, &list);
     }
 };

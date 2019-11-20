@@ -10,7 +10,7 @@ int main () {
     enhanced_list_test intest;
     intest.test();
 
-    cout << "\033[33mDone. Failed asserts: " << intest.getFailedTests()<< ". Ok Asserts: " << intest.getOks() << "\033[0m" << endl;
+    cout << "\033[33mDone. Failed asserts: " << intest.get_failed_tests()<< ". Ok Asserts: " << intest.get_oks() << "\033[0m" << endl;
 
     return 0;
 }

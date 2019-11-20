@@ -85,9 +85,7 @@ const int& element = int_list[2]; // It does not perform any boundary checks
 ####Note
 
 Due to unique_ptr, it is possible to chain operations `list->_filter(...)->_map(...)` (without worrying about
-freeing themiddle pointer), but with too many calls it may end up as a seg fault, because the unique_ptr will
-deallocate the list pointer after it is out of scope, in chained calls it could happen in the middle of
-the invocations.
+freeing the middle pointer), but watch out for middle unique-pointers deallocation before method calling.
 
 
 ## Project auto-tasks
