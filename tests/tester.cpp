@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <sstream>
 #include <list>
+#include <list>
+#include <vector>
 
 #include <iostream>
 
@@ -49,6 +51,19 @@ class tester {
     }
 
     template<typename T>
+    void assert_equal_vector(vector<T>* actual, vector<T>* expected) {
+        size_t size_1 = (*actual).size();
+        size_t size_2 = (*expected).size();
+        if(size_1 == size_2) 
+            verify_each_vectorelement(actual, expected);
+        else {
+            ostringstream message;
+            message << "Expected list size: " << size_1 << " to be " << size_2;
+            fail_test(message.str());
+        }
+    }
+
+    template<typename T>
     void assert_not_equal(T* arg1, T* arg2) {
         if(arg1 != arg2) ok_test(arg2);
         else {
@@ -69,6 +84,14 @@ class tester {
 
     template<typename T>
     void verify_each_element(list<T>* actual, list<T>* expected) {
+        for(auto it = (*actual).begin(), it_2 = (*expected).begin(); it != (*actual).end(); ++it) {
+            assert_equal(*it, *it_2);
+            it_2++;
+        }
+    }
+
+    template<typename T>
+    void verify_each_vectorelement(vector<T>* actual, vector<T>* expected) {
         for(auto it = (*actual).begin(), it_2 = (*expected).begin(); it != (*actual).end(); ++it) {
             assert_equal(*it, *it_2);
             it_2++;

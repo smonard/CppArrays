@@ -6,7 +6,8 @@ using namespace std;
 class enhanced_list_test : public tester {
     public:
 
-    void test(){
+    void test() override {
+        cout<< "List tests" << endl;
         count_with_closure();
         count_with_lambda();
         each_with_closure();

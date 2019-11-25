@@ -1,4 +1,5 @@
 #include "src/enhanced_list.cpp"
+#include "src/enhanced_vector.cpp"
 #include <iostream>
 #include <stdlib.h>
 #include <sstream>
@@ -19,7 +20,7 @@ bool is_prime(const int& number) {
   return counter == 2;
 }
 
-int main() {
+void list_() {
   enhanced_list<int> int_list{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
   std::cout << endl << "Even values from original list: " << int_list.count([] (const int& number) { return number % 2 == 0; } ) << endl;
   
@@ -38,6 +39,32 @@ int main() {
   std::cout << "Contents of the new list: " << endl;
   void (*print_values)(const string&) = [] (const string& result) { std::cout << result << endl; };
   (*mapped_list).each(print_values);
+}
+
+void vector_() {
+  enhanced_vector<int> int_list{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+  std::cout << endl << "Even values from original list: " << int_list.count([] (const int& number) { return number % 2 == 0; } ) << endl;
   
+  auto mapped_list = int_list
+          ._filter(is_prime)
+          ->_map([] (const int& number) {  
+            ostringstream element;
+            element << "result for " << number << " = " << to_string(factorial(number));
+            return element.str();
+          })->_map([] (const string& message) {  
+            ostringstream element;
+            element << "The " << message;
+            return element.str();
+          });
+
+  std::cout << "Contents of the new list: " << endl;
+  void (*print_values)(const string&) = [] (const string& result) { std::cout << result << endl; };
+  (*mapped_list).each(print_values);
+}
+
+int main() {
+  list_();
+  vector_();
+
   return 0;
 }
